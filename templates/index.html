@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Payments Hub Developers | Custom Pay API Sample Store</title>
+   <style>
+        @font-face {
+          font-family: 'Figtree';
+          src: url('./src/assets/Figtree-VariableFont_wght.ttf')  format('truetype');
+          font-weight: 700;
+          font-style: normal;
+        }
+       body {
+         justify-content: center;
+         align-items: center;
+         background-color: #222529;
+         font-family: 'Figtree', sans-serif;
+       }
+
+       .flex-div {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         height: 60vh;
+         margin: 0;
+       }
+    
+       .container {
+         display: flex;
+         align-items: center;
+       }
+    
+       .product-container,
+       form {
+         flex: 1;
+         padding: 20px;
+         border-radius: 5px;
+         background-color: #798089;
+         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+       }
+    
+       .product-container {
+         margin-right: 20px;
+       }
+    
+       .product-image img {
+         max-width: 230px;
+         height: auto;
+         margin: 0 auto;
+         margin-left: 1.3rem;
+         border-radius: 5px;
+       }
+    
+       .product-details {
+         margin-left: 20px;
+       }
+    
+       .product-title {
+         font-size: 24px;
+         font-weight: bold;
+         margin: 0;
+       }
+    
+       .product-description {
+         margin-top: 10px;
+         color: #555;
+       }
+    
+       .product-price {
+         margin-top: 10px;
+         font-weight: bold;
+       }
+    
+       .discount {
+         color: #fff;
+         font-weight: normal;
+       }
+
+       .headings h1 {
+        margin-top: 50px;
+        color: #fff;
+        display: block;
+        font-size: 28px;
+        text-align: center;
+       }
+
+       .headings h2 {
+        color: #1FC4B3;
+        display: block;
+        font-size: 24px;
+        text-align: center;
+       }
+    
+       form {
+         display: flex;
+         flex-direction: column;
+         align-items: flex-start;
+       }
+    
+       label {
+         display: block;
+         font-weight: bold;
+         margin-bottom: 5px;
+       }
+    
+       input[type="number"],
+       input[type="text"] {
+         width: 100%;
+         padding: 10px;
+         margin-bottom: 10px;
+         border: 1px solid #ccc;
+         border-radius: 3px;
+         box-sizing: border-box;
+       }
+    
+       button[type="submit"] {
+         padding: 10px 20px;
+         background-color: #1FC4B3;
+         color: #fff;
+         border: none;
+         border-radius: 3px;
+         cursor: pointer;
+         font-size: 16px;
+         font-weight: bold;
+       }
+     </style>    
+</head>
+<body>
+  <div class="headings">
+    <h1>Payments Hub Developers</h1>
+    <h2>Custom Pay API Sample Store</h2>
+  </div>
+  <div class="flex-div">
+   <div class="container">
+     <div class="product-container">
+       <div class="product-image">
+         <img src="https://i.dummyjson.com/data/products/1/thumbnail.jpg" alt="Product Thumbnail">
+       </div>
+       <div class="product-details">
+         <h2 class="product-title">iPhone 9</h2>
+         <p class="product-description">Mobile phone</p>
+         <p class="product-price">
+           Price: $549
+           <span class="discount">(-12.96%)</span>
+         </p>
+       </div>
+     </div>
+      <form>
+       <div>
+         <label for="account">Account Number:</label>
+         <input type="text" name="account" id="account" value="4111111111111111" required>
+       </div>
+       <div>
+         <label for="expirationDate">Expiration Date:</label>
+         <input type="text" name="expirationDate" id="expirationDate" value="2504" required>
+         <div>
+           <label for="cvv2">CVV2:</label>
+           <input type="text" name="cvv2" id="cvv2" value="123" required>
+         </div>
+         <button type="submit" id="buyNow">Buy Now</button>
+       </form>
+     </div>
+    </div>
+
+     <script>
+       document.addEventListener('DOMContentLoaded', () => {
+         const form = document.querySelector('form');
+         form.addEventListener('submit', async (event) => {
+           event.preventDefault();
+    
+           const accountNumber = document.getElementById('account').value;
+           const expirationDate = document.getElementById('expirationDate').value;
+           const cvv2 = document.getElementById('cvv2').value;
+    
+           const payload = {
+             accountNumber,
+             expirationDate,
+             cvv2,
+             amount: 549.00
+           };
+    
+           try {
+             const response = await fetch('/', {
+               method: 'POST',
+               headers: {
+                 'Content-Type': 'application/json'
+               },
+               body: JSON.stringify(payload)
+             });
+    
+             const data = await response.json();
+            
+             if(data.includes('APPROVAL')){
+               alert('Transaction processed successfully')
+             } else {
+               alert('An error occurred when processing your transaction')
+             }
+           } catch (error) {
+             // An error occurred during the request
+             console.log('An error occurred', error);
+           }
+         });
+       });
+     </script>     
+   </body>
+</html>
